@@ -1,0 +1,37 @@
+{
+	"ImportPath": "goserver",
+	"GoVersion": "go1.6",
+	"Deps": [
+		{
+			"ImportPath": "github.com/VividCortex/godaemon",
+			"Rev": "3d9f6e0b234fe7d17448b345b2e14ac05814a758"
+		},
+		{
+			"ImportPath": "github.com/blinry/goyaml",
+			"Rev": "025607cd2e381e6e08a56ffec46ac79e23ca2d88"
+		},
+		{
+			"ImportPath": "github.com/cihub/seelog",
+			"Comment": "v2.6-1-g3549fbb",
+			"Rev": "3549fbb0ea07f15a54dba3d16ccb22785a813d30"
+		},
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.2-188-g66312f7",
+			"Rev": "66312f7fe2678aa0f5ec770f96702f4c4ec5aa8e"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "acf3be1b335c8ce30b2c8d51300984666f0ceefa"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-sqlite3",
+			"Comment": "v1.1.0-46-g10876d7",
+			"Rev": "10876d7dac65f02064c03d7372a2f1dfb90043fe"
+		}
+	]
+}

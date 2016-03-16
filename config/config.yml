@@ -1,0 +1,45 @@
+logging:
+  filename: /home/eop/gopath/src/server/log/server.log
+  errfilename: /home/eop/gopath/src/server/log/server_err.log
+  maxsize: 100000
+  maxrolls: 5
+  level: debug
+
+daemon:
+  switch: off
+
+pprof:
+  switch: off
+  ip: 0.0.0.0
+  port: 12345
+
+httpserver:
+  switch: on
+  ip: 0.0.0.0
+  port: 9999
+
+intervals:
+  get_docker_containers_info: 10
+  get_docker_images_info: 10
+
+dbserver:
+  switch: on
+  log_sql_execute_time_switch: on
+  conn_check_interval: 5
+  dbitems:
+    - DBName: mysql1
+      DriverName: mysql
+      DataSourceName: root:mysql@tcp(10.1.63.78:3306)/eop
+      MaxIdleConns: 10
+      MaxOpenConns: 10
+    - DBName: mysql2
+      DriverName: mysql
+      DataSourceName: root:mysql@tcp(10.1.63.78:3306)/eop
+      MaxIdleConns: 10
+      MaxOpenConns: 10
+    - DBName: sqlite3
+      DriverName: sqlite3
+      DataSourceName: /home/eop/gopath/src/server/a.db
+      MaxIdleConns: 10
+      MaxOpenConns: 10
+
