@@ -1,6 +1,7 @@
 {
 	"ImportPath": "goserver",
 	"GoVersion": "go1.6",
+	"GodepVersion": "v58",
 	"Deps": [
 		{
 			"ImportPath": "github.com/VividCortex/godaemon",

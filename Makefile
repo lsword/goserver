@@ -4,7 +4,10 @@ PROGRAMNAME:=goserver
 CURDIR:=$(shell pwd)
 OLDGOPATH=$(GOPATH)
 
-all: save install
+all: godep save install
+
+godep:
+	@go get -u github.com/tools/godep
 
 save:
 	@export GOPATH=$(CURDIR); go get -v ./...; cd $(CURDIR)/src/$(PROGRAMNAME); godep save
