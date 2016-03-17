@@ -72,7 +72,8 @@ type DBServerConfig struct {
 }
 
 var defaultDBServerConfig = DBServerConfig{
-	Switch: "off",
+	Switch:                  "on",
+	LogSQLExecuteTimeSwitch: "on",
 }
 
 type IntervalsConfig struct {

@@ -16,7 +16,7 @@ restore:
 	@export GOPATH=$(CURDIR); cd $(CURDIR)/src/$(PROGRAMNAME); godep restore
 
 install:
-	@export GOPATH=$(CURDIR); cd $(CURDIR)/src/$(PROGRAMNAME); godep go install
+	@export GOPATH=$(CURDIR); cd $(CURDIR)/src/$(PROGRAMNAME); go install
 
 test:
 	@export GOPATH=$(CURDIR); cd $(CURDIR)/src/$(PROGRAMNAME); godep go test 

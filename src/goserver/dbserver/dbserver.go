@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"goserver/config"
+	"goserver/log"
 )
 
 type DBItem struct {
@@ -20,7 +21,8 @@ type DBItem struct {
 }
 
 type Database struct {
-	DBItems map[string]*DBItem
+	DBItems                 map[string]*DBItem
+	LogSQLExecuteTimeSwitch string
 }
 
 var database *Database
@@ -32,7 +34,8 @@ func Run(c *config.Config) {
 
 	if database == nil {
 		database = &Database{
-			DBItems: make(map[string]*DBItem),
+			DBItems:                 make(map[string]*DBItem),
+			LogSQLExecuteTimeSwitch: c.DBServer.LogSQLExecuteTimeSwitch,
 		}
 	}
 
@@ -104,7 +107,7 @@ func (database *Database) DelItem(itemName string) {
 }
 
 func (database *Database) Connect() {
-	for k, v := range database.DBItems {
+	for _, v := range database.DBItems {
 		if v.Connected == 0 || v.DB == nil {
 			db, err := sql.Open(v.DriverName, v.DataSourceName)
 			if err != nil {
@@ -115,11 +118,8 @@ func (database *Database) Connect() {
 			v.DB.SetMaxIdleConns(v.MaxIdleConns)
 			err = v.DB.Ping()
 			if err != nil {
-				//record log here
-				println("connect db error:", err.Error())
 				v.DB = nil
 			} else {
-				println("connect db ok:", k)
 				v.Connected = 1
 			}
 		}
@@ -148,7 +148,12 @@ func (database *Database) Query(dbname, sqlstr string) (*sql.Rows, error) {
 		return nil, fmt.Errorf("db(%s) not connected", dbname)
 	}
 
+	begintime := time.Now()
 	rows, err := db.Query(sqlstr)
+	if database.LogSQLExecuteTimeSwitch == "on" {
+		log.Infof("Query(%s), time:%v", sqlstr, time.Now().Sub(begintime))
+	}
+
 	return rows, err
 }
 
@@ -167,11 +172,16 @@ func (database *Database) QueryData(dbname, sqlstr string) (int, *[]map[string]i
 		return -1, nil, fmt.Errorf("db(%s) not connected", dbname)
 	}
 
+	begintime := time.Now()
 	rows, err := db.Query(sqlstr)
 	if err != nil {
 		return -1, nil, err
 	}
 	defer rows.Close()
+
+	if database.LogSQLExecuteTimeSwitch == "on" {
+		log.Infof("QueryData(%s), time:%v", sqlstr, time.Now().Sub(begintime))
+	}
 
 	columns, _ := rows.Columns()
 	scanArgs := make([]interface{}, len(columns))
@@ -220,6 +230,8 @@ func (database *Database) Exec(dbname, sqlstr string, args ...interface{}) (int6
 		return -1, -1, fmt.Errorf("db(%s) not connected", dbname)
 	}
 
+	begintime := time.Now()
+
 	stmt, err := db.Prepare(sqlstr)
 	if err != nil {
 		return -1, -1, fmt.Errorf("db(%s) prepare error:%s", dbname, err.Error())
@@ -229,6 +241,10 @@ func (database *Database) Exec(dbname, sqlstr string, args ...interface{}) (int6
 	res, err := stmt.Exec(args...)
 	if err != nil {
 		return -1, -1, fmt.Errorf("db(%s) exec error:%s", dbname, err.Error())
+	}
+
+	if database.LogSQLExecuteTimeSwitch == "on" {
+		log.Infof("Exec(%s), time:%v", sqlstr, time.Now().Sub(begintime))
 	}
 
 	affectCnt, _ := res.RowsAffected()
